@@ -1,47 +1,64 @@
-class SmartSticky {
-  constructor(el) {
+type ElementType = HTMLElement | null;
+
+export default class SmartSticky {
+  private _el: HTMLElement | null;
+  private elHeight: number;
+  private resizeObserver: ResizeObserver | null;
+  private scrollY: number;
+  private stickyEnd: number;
+  private top: number;
+  private windowHeight: number;
+
+  get el() {
+    return this._el;
+  }
+
+  constructor(element: string | ElementType) {
     this.scrollY = this.getScrollY();
     this.windowHeight = this.getWindowHeight();
 
-    this.el = typeof el !== "string" ? el : document.querySelector(el);
+    this._el =
+      typeof element !== "string" ? element : document.querySelector(element);
     this.elHeight = this.getElHeight();
     this.resizeObserver = null;
     this.stickyEnd = this.getStickyEnd();
     this.top = 0;
   }
 
-  getElHeight() {
-    return this.el?.clientHeight ?? 0;
+  private getElHeight() {
+    return this._el?.clientHeight ?? 0;
   }
 
-  getScrollY() {
+  private getScrollY() {
     const y = window.scrollY;
 
     return y <= 0 ? 0 : y;
   }
 
-  getStickyEnd(h) {
+  private getStickyEnd(h?: number) {
     const windowHeight = typeof h === "undefined" ? this.windowHeight : h;
     return (windowHeight - this.elHeight) * -1;
   }
 
-  getWindowHeight() {
+  private getWindowHeight() {
     return window?.innerHeight ?? 0;
   }
 
-  setTopStyle(top) {
-    this.el.style.top = top;
+  private setTopStyle(top: string) {
+    if (this._el) {
+      this._el.style.top = top;
+    }
   }
 
-  applyTopStyle() {
+  private applyTopStyle() {
     this.setTopStyle(`${this.top * -1}px`);
   }
 
-  clearTopStyle() {
+  private clearTopStyle() {
     this.setTopStyle("");
   }
 
-  onWindowScroll = () => {
+  private onWindowScroll = () => {
     const y = this.getScrollY();
 
     if (this.elHeight > this.windowHeight) {
@@ -64,7 +81,7 @@ class SmartSticky {
     this.scrollY = y;
   };
 
-  onWindowResize = () => {
+  private onWindowResize = () => {
     const windowHeight = this.getWindowHeight();
 
     this.elHeight = this.getElHeight();
@@ -91,19 +108,19 @@ class SmartSticky {
     this.windowHeight = windowHeight;
   };
 
-  onElementResize = () => {
+  private onElementResize = () => {
     this.elHeight = this.getElHeight();
     this.windowHeight = this.getWindowHeight();
     this.stickyEnd = this.getStickyEnd();
   };
 
   init() {
-    if (this.el) {
+    if (this._el) {
       window.addEventListener("resize", this.onWindowResize);
       window.addEventListener("scroll", this.onWindowScroll);
 
       this.resizeObserver = new ResizeObserver(this.onElementResize);
-      this.resizeObserver.observe(this.el);
+      this.resizeObserver.observe(this._el);
     }
   }
 
@@ -115,12 +132,17 @@ class SmartSticky {
       this.resizeObserver.disconnect();
     }
 
-    if (this.el) {
+    if (this._el) {
       this.clearTopStyle();
     }
   }
 }
 
-const ss = new SmartSticky("#sticky");
+const element = document.getElementById("sticky");
 
-ss.init();
+const sticky = new SmartSticky(element);
+// const sticky = new SmartSticky("#sticky");
+
+sticky.init();
+
+console.log(sticky.el);
