@@ -1,5 +1,5 @@
 {
-  "name": "smartsticky",
+  "name": "cleversticky",
   "version": "1.0.0",
   "description": "Enhanced \"position: sticky\" functionality",
   "main": "dist/index.js",
@@ -8,13 +8,13 @@
   "types": "dist/index.d.ts",
   "author": "Brad Adams <hi@breadadams.com> (https://breadadams.com/)",
   "license": "MIT",
-  "homepage": "https://github.com/breadadams/smartsticky",
+  "homepage": "https://github.com/breadadams/cleversticky",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/breadadams/smartsticky"
+    "url": "git+https://github.com/breadadams/cleversticky"
   },
   "bugs": {
-    "url": "https://github.com/breadadams/smartsticky/issues"
+    "url": "https://github.com/breadadams/cleversticky/issues"
   },
   "scripts": {
     "start": "parcel ./demo/index.html -d demo-build",

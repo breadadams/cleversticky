@@ -1,7 +1,7 @@
 import { getElementHeight, getWindowHeight } from "./utils";
 import { ElementType } from "./types";
 
-export default class SmartSticky {
+export default class CleverSticky {
   private _el: ElementType;
   private elHeight: number;
   private resizeObserver: ResizeObserver | null;
