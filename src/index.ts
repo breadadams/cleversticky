@@ -1,4 +1,5 @@
-type ElementType = HTMLElement | null;
+import { getElementHeight, getWindowHeight } from "./utils";
+import { ElementType } from "./types";
 
 export default class SmartSticky {
   private _el: ElementType;
@@ -15,7 +16,7 @@ export default class SmartSticky {
 
   constructor(element: string | ElementType) {
     this.scrollY = this.getScrollY();
-    this.windowHeight = this.getWindowHeight();
+    this.windowHeight = getWindowHeight();
 
     this._el =
       typeof element !== "string" ? element : document.querySelector(element);
@@ -26,7 +27,7 @@ export default class SmartSticky {
   }
 
   private getElHeight() {
-    return this._el?.clientHeight ?? 0;
+    return getElementHeight(this._el);
   }
 
   private getScrollY() {
@@ -40,10 +41,6 @@ export default class SmartSticky {
     return (windowHeight - this.elHeight) * -1;
   }
 
-  private getWindowHeight() {
-    return window?.innerHeight ?? 0;
-  }
-
   private setTopStyle(top: string) {
     if (this._el) {
       this._el.style.top = top;
@@ -51,7 +48,6 @@ export default class SmartSticky {
   }
 
   private applyTopStyle() {
-    console.log(this.top);
     this.setTopStyle(`${this.top * -1}px`);
   }
 
@@ -88,7 +84,7 @@ export default class SmartSticky {
   };
 
   private onWindowResize = () => {
-    const windowHeight = this.getWindowHeight();
+    const windowHeight = getWindowHeight();
 
     this.elHeight = this.getElHeight();
     this.stickyEnd = this.getStickyEnd(windowHeight);
@@ -116,7 +112,6 @@ export default class SmartSticky {
 
   private onElementResize = () => {
     this.elHeight = this.getElHeight();
-    this.windowHeight = this.getWindowHeight();
     this.stickyEnd = this.getStickyEnd();
 
     if (!this.isTallerThanViewport()) {
