@@ -1,17 +1,21 @@
 {
   "name": "smartsticky",
   "version": "1.0.0",
-  "description": "",
+  "description": "Enhanced \"position: sticky\" functionality",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "browser": "dist/index.iife.js",
   "types": "dist/index.d.ts",
   "author": "Brad Adams <hi@breadadams.com> (https://breadadams.com/)",
   "license": "MIT",
-  "keywords": [
-    "Sticky",
-    "Scroll"
-  ],
+  "homepage": "https://github.com/breadadams/smartsticky",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breadadams/smartsticky"
+  },
+  "bugs": {
+    "url": "https://github.com/breadadams/smartsticky/issues"
+  },
   "scripts": {
     "start": "parcel ./demo/index.html -d demo-build",
     "build": "rimraf dist && node ./esbuild.js && npm run ts-types",
@@ -23,5 +27,12 @@
     "parcel-bundler": "^1.12.5",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"
-  }
+  },
+  "keywords": [
+    "Sticky",
+    "Scroll"
+  ],
+  "files": [
+    "dist/*"
+  ]
 }
