@@ -20,7 +20,8 @@
     "start": "parcel ./demo/index.html -d demo-build",
     "build": "rimraf dist && node ./esbuild.js && npm run ts-types",
     "build-demo": "rimraf demo-build && parcel build ./demo/index.html -d demo-build",
-    "ts-types": "tsc --emitDeclarationOnly"
+    "ts-types": "tsc --emitDeclarationOnly",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "esbuild": "^0.12.8",
