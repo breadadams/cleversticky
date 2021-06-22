@@ -1,4 +1,4 @@
-import { getElementHeight, getWindowHeight } from "./utils";
+import { getElementHeight, getScrollY, getWindowHeight } from "./utils";
 import { ElementType } from "./types";
 
 export default class CleverSticky {
@@ -15,7 +15,7 @@ export default class CleverSticky {
   }
 
   constructor(element: string | ElementType) {
-    this.scrollY = this.getScrollY();
+    this.scrollY = getScrollY();
     this.windowHeight = getWindowHeight();
 
     this._el =
@@ -28,12 +28,6 @@ export default class CleverSticky {
 
   private getElHeight() {
     return getElementHeight(this._el);
-  }
-
-  private getScrollY() {
-    const y = window.scrollY;
-
-    return y <= 0 ? 0 : y;
   }
 
   private getStickyEnd(h?: number) {
@@ -60,22 +54,24 @@ export default class CleverSticky {
     return this.elHeight > this.windowHeight;
   }
 
+  private calculateNewTop(newValue: number, existingValue: number) {
+    const addToTop = (add: number) => Math.min(this.top + add, this.stickyEnd);
+    const subtractFromTop = (sub: number) => Math.max(this.top - sub, 0);
+
+    if (newValue !== existingValue) {
+      const isAddition = newValue > existingValue;
+      const diff = Math.abs(existingValue - newValue);
+
+      this.top = (isAddition ? addToTop : subtractFromTop)(diff);
+      this.applyTopStyle();
+    }
+  }
+
   private onWindowScroll = () => {
-    const y = this.getScrollY();
+    const y = getScrollY();
 
     if (this.isTallerThanViewport()) {
-      if (y !== this.scrollY) {
-        const isScrollingDown = y > this.scrollY;
-        const diff = Math.abs(this.scrollY - y);
-
-        if (isScrollingDown) {
-          this.top = Math.min(this.top + diff, this.stickyEnd);
-        } else {
-          this.top = Math.max(this.top - diff, 0);
-        }
-
-        this.applyTopStyle();
-      }
+      this.calculateNewTop(y, this.scrollY);
     } else {
       this.resetTop();
     }
@@ -90,23 +86,12 @@ export default class CleverSticky {
     this.stickyEnd = this.getStickyEnd(windowHeight);
 
     if (this.isTallerThanViewport()) {
-      if (this.windowHeight !== windowHeight) {
-        const windowIsLarger = windowHeight > this.windowHeight;
-        const diff = Math.abs(this.windowHeight - windowHeight);
-
-        if (windowIsLarger) {
-          this.top = Math.min(this.top + diff, this.stickyEnd);
-        } else {
-          this.top = Math.max(this.top - diff, 0);
-        }
-
-        this.applyTopStyle();
-      }
+      this.calculateNewTop(windowHeight, this.windowHeight);
     } else {
       this.resetTop();
     }
 
-    this.scrollY = this.getScrollY();
+    this.scrollY = getScrollY();
     this.windowHeight = windowHeight;
   };
 
