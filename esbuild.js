@@ -6,7 +6,7 @@ const baseConfig = {
   bundle: true,
   sourcemap: true,
   minify: true,
-  target: ["esnext"],
+  target: ["esnext"]
 };
 
 // Build IIFE format
